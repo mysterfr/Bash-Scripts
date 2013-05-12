@@ -1,4 +1,8 @@
 #!/bin/bash
+
+#### Ce script a pour but de faire un disptaching de fichiers de séries TV dans une arborescende propre.
+#### Last update : 2013-02-10 - Myster_fr
+
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # Un peu de couleur ne fait pas de mal
 RED="\033[31m"
