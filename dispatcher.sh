@@ -201,6 +201,7 @@ for i in `find $DEST -name "*[sS][0-9][[0-9][Ee][0-9][0-9]*" -type f  -printf "%
 
 done
 
+# On fait enfin un peu de ménage dans les fichiers temporaires contenant la liste des fichiers à traiter
 find /tmp -name "dispatcher*" -mtime +7 -exec rm -rf {} \;
 
 
