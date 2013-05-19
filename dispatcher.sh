@@ -1,8 +1,4 @@
 #!/bin/bash
-
-#### Ce script a pour but de faire un disptaching de fichiers de séries TV dans une arborescende propre.
-#### Last update : 2013-02-10 - Myster_fr
-
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 # Un peu de couleur ne fait pas de mal
 RED="\033[31m"
@@ -42,6 +38,8 @@ SOURCE="/mnt/Octopus/torrents/"
 
 # Dossier "temporaire" dans lequel tous les fichiers sont transferes, avant dispatch
 DEST="/data/test"									
+DOC_DEST="/mnt/Epice_Media/Movie/Documentaires"
+TUTO_DEST="/mnt/Epice_Media/Movie/Tutoriels"
 
 # Dossier racine de destination lors du dispatch. (Repository final) 
 # C'est dans ce dossier que seront crees les arborescences pour chaque serie.
@@ -62,7 +60,7 @@ SERIES="arrow|homeland|game.of.thrones|revolution.2012|grimm|dont.trust.the.bitc
 # Separer les patterns avec un PIPE, echapper les caracteres speciaux a l'aide de \ 
 # Toujours conserver "doing/" et "watch/"
 # 
-EXCLUDE="doing\/|watch\/|.nfo|.mp3|.avi|.mp4|fastsub|webdl|web.dl|web-dl";
+EXCLUDE="doing\/|watch\/|.nfo|.mp3|.avi|.mp4|fastsub|webdl|web.dl|web-dl|-missing";
 #
 TS=`date +%Y%m%d-%H.%M` 							# TimeStamp
 FILELIST="/tmp/dispatcher_list_$TS"					# Fichier contenant la liste des fichiers a transferer
@@ -201,8 +199,23 @@ for i in `find $DEST -name "*[sS][0-9][[0-9][Ee][0-9][0-9]*" -type f  -printf "%
 
 done
 
-# On fait enfin un peu de ménage dans les fichiers temporaires contenant la liste des fichiers à traiter
 find /tmp -name "dispatcher*" -mtime +7 -exec rm -rf {} \;
+
+
+### Get Docs
+
+/usr/bin/rsync --ignore-existing -vt -P --no-dirs --no-R --files-from=<(find $SOURCE -iname "*.DOC.*" -mtime -$HIST -printf "%P\n") $SOURCE $DOC_DEST;
+/usr/bin/rsync --ignore-existing -vt -P --no-dirs --no-R --files-from=<(find $SOURCE -iname "*factories*"  -mtime -$HIST -printf "%P\n") $SOURCE $DOC_DEST;
+/usr/bin/rsync --ignore-existing -vt -P --no-dirs --no-R --files-from=<(find $SOURCE -iname "*constructeurs*" -mtime -$HIST -printf "%P\n") $SOURCE $DOC_DEST;
+/usr/bin/rsync --ignore-existing -vt -P --no-dirs --no-R --files-from=<(find $SOURCE -iname "*irai.dormir*" -mtime -$HIST -printf "%P\n") $SOURCE $DOC_DEST;
+/usr/bin/rsync --ignore-existing -vt -P --no-dirs --no-R --files-from=<(find $SOURCE -iname "*terre.inconnue*" -mtime -$HIST -printf "%P\n") $SOURCE $DOC_DEST;
+/usr/bin/rsync --ignore-existing -vt -P --no-dirs --no-R --files-from=<(find $SOURCE -iname "*megastructures*" -mtime -$HIST -printf "%P\n") $SOURCE $DOC_DEST;
+
+### Get Tutorials
+
+/usr/bin/rsync --ignore-existing -vt -P --no-dirs --no-R --files-from=<(find $SOURCE -iname "*Video2Brain*" -mtime -$HIST -printf "%P\n") $SOURCE $TUTO_DEST;
+
+
 
 
 umask 0022
