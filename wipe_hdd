@@ -1,1 +1,1 @@
-while true; do echo "$(date) - New Pass"openssl enc -aes-256-ctr -pass pass:"$(tr -cd '[:alnum:]' < /dev/urandom | head -c128)" -nosalt </dev/zero | dd bs=64K ibs=64K of=/dev/sda6 status=progress; done
+while true; do echo "$(date) - New Pass" ; openssl enc -aes-256-ctr -pass pass:"$(tr -cd '[:alnum:]' < /dev/urandom | head -c128)" -nosalt </dev/zero | dd bs=64K ibs=64K of=/dev/sda6 status=progress; done
